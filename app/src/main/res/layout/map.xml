@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".User.MapActivity">
+
+    <EditText
+        android:id="@+id/et_source"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:hint="Enter your location"
+        android:padding="10dp"
+
+        />
+
+    <EditText
+        android:id="@+id/et_destination"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:hint="Enter destination"
+        android:padding="10dp" />
+
+    <Button
+        android:id="@+id/bt_track"
+        android:layout_width="251dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        android:text="display track" />
+
+
+</LinearLayout>

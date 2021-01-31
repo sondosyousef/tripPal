@@ -18,11 +18,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trip">
-        <activity android:name=".HelperClasses.HomeAdapter.PointInCity"></activity>
+        <activity android:name=".HelperClasses.HomeAdapter.PointInCity" />
         <activity android:name=".HelperClasses.HomeAdapter.discriptionPoint" />
-        <activity android:name=".User.RecyclerPoint"
+        <activity
+            android:name=".User.RecyclerPoint"
             tools:ignore="Instantiatable" />
-        <activity android:name=".User.RecycleCity"
+        <activity
+            android:name=".User.RecycleCity"
             tools:ignore="Instantiatable" />
         <activity android:name=".User.DetailActivity2" />
         <activity android:name=".HelperClasses.HomeAdapter.discription" />

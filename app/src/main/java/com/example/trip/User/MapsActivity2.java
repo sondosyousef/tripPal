@@ -2,6 +2,7 @@ package com.example.trip.User;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import java.util.ArrayList;
@@ -10,8 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
+
 // classes needed to initialize map
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.trip.HelperClasses.HomeAdapter.MostHelperClass;
 import com.example.trip.R;
+import com.google.android.material.navigation.NavigationView;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -53,6 +62,10 @@ import android.view.View;
 import android.widget.Button;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MapsActivity2 extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener, PermissionsListener {
     // variables for adding location layer
@@ -69,8 +82,19 @@ public class MapsActivity2 extends AppCompatActivity implements OnMapReadyCallba
     LatLng NasrMosque =new LatLng(32.21891310852186, 35.26169907305228);
     LatLng SabanaTouqan =new LatLng(32.21910978147422, 35.261180428486036);
     LatLng Turkishbaths =new LatLng(32.22485493566722, 35.23628566214025);
+    String GET_JSON_DATA_HTTP_URL = "http://10.0.2.2:84/Palestine_Info/nablus.php";
+    String JSON_IMAGE_TITLE_NAME = "image_title";
+    String JSON_IMAGE_URL = "image_url";
+    String JSON_Description = "description";
 
-    ArrayList<String> title = new ArrayList<>();
+    JsonArrayRequest jsonArrayRequest ;
+
+    RequestQueue requestQueue ;
+
+    ArrayList<String> title;
+    ArrayList<String> des;
+    ArrayList<String> url;
+
     private MapboxMap mapboxMap;
     // variables for adding location layer
     private PermissionsManager permissionsManager;
@@ -102,18 +126,15 @@ public class MapsActivity2 extends AppCompatActivity implements OnMapReadyCallba
         arrayList.add(SabanaTouqan);
         arrayList.add(Turkishbaths);
 
+        title = new ArrayList<>();
+       des= new ArrayList<>();
+        url= new ArrayList<>();
 
-        title.add("Sebastia");
-        //title.add("Bi'er Yacoub ");
-        title.add("Maqam Joseph");
-        title.add("Mount Gerizim");
-        title.add("old City");
-        title.add("Khan Traders");
-        title.add("Abdul Hadi Palace");
-        title.add("Lighthouse Clock");
-        title.add("Nasr Mosque");
-        title.add("Sabana Touqan");
-        title.add("Turkish baths");
+
+
+
+        JSON_DATA_WEB_CALL();
+
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull final MapboxMap mapboxMap) {
@@ -135,9 +156,15 @@ public class MapsActivity2 extends AppCompatActivity implements OnMapReadyCallba
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
                         String markerTitle = marker.getTitle();
-                        Intent intent = new Intent(MapsActivity2.this,DetailActivity2.class);
-                        intent.putExtra("title",markerTitle);
-                        startActivity(intent);
+                         int i = title.indexOf(markerTitle);
+
+
+                           Intent intent = new Intent(MapsActivity2.this, DetailActivity2.class);
+                           intent.putExtra("title", markerTitle);
+                           intent.putExtra("ds", des.get(i));
+                           intent.putExtra("url", url.get(i));
+                           startActivity(intent);
+
                         return false;
                     }
 
@@ -145,6 +172,56 @@ public class MapsActivity2 extends AppCompatActivity implements OnMapReadyCallba
 
             }
         });
+    }
+
+    private void JSON_DATA_WEB_CALL() {
+        jsonArrayRequest = new JsonArrayRequest(GET_JSON_DATA_HTTP_URL,
+
+                new com.android.volley.Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        JSON_PARSE_DATA_AFTER_WEBCALL(response);
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void JSON_PARSE_DATA_AFTER_WEBCALL(JSONArray array) {
+        for(int i = 0; i<array.length(); i++) {
+
+            String GetDataAdapter2 = new String();
+            String df = new String();
+            String url1 = new String();
+         MostHelperClass get2= new MostHelperClass();
+
+            JSONObject json = null;
+            try {
+
+                json = array.getJSONObject(i);
+
+                GetDataAdapter2=json.getString(JSON_IMAGE_TITLE_NAME);
+                df=json.getString(JSON_Description);
+                url1=json.getString(JSON_IMAGE_URL);
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+            }
+            title.add(GetDataAdapter2);
+            des.add(df);
+            url.add(url1);
+        }
+
     }
 
     @Override
@@ -169,6 +246,7 @@ public class MapsActivity2 extends AppCompatActivity implements OnMapReadyCallba
                                 .build();
                         // Call this method with Context from within an Activity
                         NavigationLauncher.startNavigation(MapsActivity2.this, options);
+
                     }
                 });
             }
@@ -196,6 +274,8 @@ public class MapsActivity2 extends AppCompatActivity implements OnMapReadyCallba
         Point destinationPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
                 locationComponent.getLastKnownLocation().getLatitude());
         Point originPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
+
+
 
         GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
         if (source != null) {

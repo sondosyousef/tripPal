@@ -68,6 +68,7 @@ public class MostAdapter extends RecyclerView.Adapter<MostAdapter.MostViewHolder
                 i.putExtra("image_name", mostHelperClass1.title);
                 i.putExtra("image_Url", mostHelperClass1.image);
                 i.putExtra("description", mostHelperClass1.description);
+                i.putExtra("city_name", mostHelperClass1.nameCity);
                 v.getContext().startActivity(i);
 
             }

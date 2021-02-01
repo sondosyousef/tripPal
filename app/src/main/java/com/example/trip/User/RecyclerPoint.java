@@ -74,6 +74,7 @@ public class RecyclerPoint extends RecyclerView.Adapter<RecyclerPoint.ViewHolder
                 i.putExtra("image_name", getDataAdapter1.title);
                 i.putExtra("image_Url", getDataAdapter1.image);
                 i.putExtra("description", getDataAdapter1.description);
+                i.putExtra("city_name", getDataAdapter1.nameCity);
                 v.getContext().startActivity(i);
 
             }

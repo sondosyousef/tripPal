@@ -67,6 +67,8 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
     String JSON_IMAGE_TITLE_NAME = "image_title";
     String JSON_IMAGE_URL = "image_url";
     String JSON_Description = "description";
+    String JSON_Name_City = "city_name";
+
     String JSON_point1 = "point_1";
     String JSON_point2 = "point_2";
     String JSON_point3 = "point_3";
@@ -249,7 +251,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
                 startActivity( new Intent( this, MapActivity.class ) );
                 break;
             case R.id.nav_add_tourplan:
-                startActivity( new Intent( this, TourplanActivity.class ) );
+                startActivity( new Intent( this, ListView1.class ) );
                 break;
             case R.id.nav_reminder:
                 startActivity( new Intent( this, ReminderActivity.class ) );
@@ -302,6 +304,9 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
                 GetDataAdapter2.setImage(json.getString(JSON_IMAGE_URL));
                 GetDataAdapter2.setDescription(json.getString(JSON_Description));
+
+
+
                 GetDataAdapter2.setPoin1(json.getString(JSON_point1));
                 GetDataAdapter2.setPoint2(json.getString(JSON_point2));
                 GetDataAdapter2.setPoint3(json.getString(JSON_point3));
@@ -342,6 +347,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
                 mostHelperClass.setImage(json.getString(JSON_IMAGE_URL));
                 mostHelperClass.setDescription(json.getString(JSON_Description));
+                mostHelperClass.setNameCity(json.getString(JSON_Name_City));
 
 
 
@@ -380,7 +386,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
     }
 
     public void tourplan(View view) {
-        startActivity( new Intent( this, TourplanActivity.class ) );
+        startActivity( new Intent( this, ListView1.class ) );
         finish();
     }
 
